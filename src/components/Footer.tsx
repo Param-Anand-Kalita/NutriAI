@@ -11,7 +11,7 @@ export default function Footer() {
             NutriAI
           </div>
           <p className="text-xs text-secondary text-center md:text-left">
-            © 2024 NutriAI. For informational purposes only. Consult a professional for clinical advice.
+            NutriAI. For informational purposes only. Consult a professional for clinical advice.
           </p>
         </div>
       </div>
