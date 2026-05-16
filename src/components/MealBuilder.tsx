@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, X, Activity, Plus, Trash2 } from 'lucide-react';
+import { Sparkles, X, Activity, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FOOD_DATABASE, FoodItem } from '../data/foods';
 
@@ -178,7 +178,7 @@ export default function MealBuilder() {
                           : 'text-secondary hover:text-on-surface hover:bg-white'
                       }`}
                     >
-                      {(item.quantity || 1) === 1 ? <Trash2 size={14} /> : '-'}
+                      {'-'}
                     </button>
                     <span className="w-10 text-center font-bold text-on-surface text-sm">
                       {item.quantity || 1}x
