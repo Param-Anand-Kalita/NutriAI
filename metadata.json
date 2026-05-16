@@ -1,0 +1,8 @@
+{
+  "name": "NutriAI",
+  "description": "AI-powered nutrition tracking and meal analysis app.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
