@@ -1,3 +1,4 @@
+import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,6 +9,10 @@ import DetailedNutrition from './components/DetailedNutrition';
 import { MealProvider } from './context/MealContext';
 
 export default function App() {
+  React.useEffect(() => {
+    document.title = "NutriAI";
+  }, []);
+
   return (
     <Router>
       <MealProvider>
