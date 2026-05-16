@@ -24,18 +24,9 @@ export const MealProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('nutriai-meal');
-    const wasCleared = localStorage.getItem('nutriai-meal-cleared');
 
     if (saved) {
       setMealItems(JSON.parse(saved));
-    } else if (!wasCleared) {
-      // First time initialization ONLY if not explicitly cleared
-      const initial = [
-        FOOD_DATABASE.find(f => f.id === 'scrambled-eggs')!,
-        FOOD_DATABASE.find(f => f.id === 'whole-wheat-toast')!,
-        FOOD_DATABASE.find(f => f.id === 'salmon')!,
-      ].filter(Boolean);
-      setMealItems(initial);
     }
     setIsInitialized(true);
   }, []);
@@ -43,14 +34,7 @@ export const MealProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Sync to localStorage
   useEffect(() => {
     if (!isInitialized) return;
-
-    if (mealItems.length > 0) {
-      localStorage.setItem('nutriai-meal', JSON.stringify(mealItems));
-      localStorage.removeItem('nutriai-meal-cleared');
-    } else {
-      localStorage.removeItem('nutriai-meal');
-      localStorage.setItem('nutriai-meal-cleared', 'true');
-    }
+    localStorage.setItem('nutriai-meal', JSON.stringify(mealItems));
   }, [mealItems, isInitialized]);
 
   const addToMeal = (food: FoodItem) => {
