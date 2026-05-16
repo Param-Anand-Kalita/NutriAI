@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, X, Activity, Plus } from 'lucide-react';
+import { Sparkles, X, Activity, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FOOD_DATABASE, FoodItem } from '../data/foods';
 
@@ -9,7 +9,7 @@ import { useMeal } from '../context/MealContext';
 export default function MealBuilder() {
   const { 
     mealItems, addToMeal, removeFromMeal, updateQuantity, 
-    totalCalories, totalProtein, totalCarbs, totalFat, mealScore 
+    totalCalories, totalProtein, totalCarbs, totalFat 
   } = useMeal();
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<FoodItem[]>([]);
@@ -171,9 +171,13 @@ export default function MealBuilder() {
                   <div className="flex items-center bg-surface-container-low rounded-2xl p-1 border border-surface-container">
                     <button 
                       onClick={() => updateQuantity(item.id, -1)}
-                      className="w-8 h-8 flex items-center justify-center text-secondary hover:text-on-surface hover:bg-white rounded-xl transition-all font-bold"
+                      className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all font-bold ${
+                        (item.quantity || 1) === 1 
+                          ? 'text-error hover:bg-error/10' 
+                          : 'text-secondary hover:text-on-surface hover:bg-white'
+                      }`}
                     >
-                      -
+                      {(item.quantity || 1) === 1 ? <Trash2 size={14} /> : '-'}
                     </button>
                     <span className="w-10 text-center font-bold text-on-surface text-sm">
                       {item.quantity || 1}x
@@ -218,11 +222,7 @@ export default function MealBuilder() {
             <Activity className="text-primary fill-primary/20" size={24} />
             <h2 className="text-lg font-bold text-on-surface">Meal Summary</h2>
           </div>
-          {mealItems.length > 0 && (
-            <div className="bg-primary/10 px-3 py-1 rounded-full">
-              <span className="text-xs font-bold text-primary">Score: {mealScore}</span>
-            </div>
-          )}
+
         </div>
         <p className="text-sm text-secondary -mt-6 mb-4">
           {mealItems.length === 0 ? "Add items to see analysis" : "Real-time AI analysis active"}

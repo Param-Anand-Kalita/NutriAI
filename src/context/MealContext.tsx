@@ -56,13 +56,15 @@ export const MealProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateQuantity = (id: string, delta: number) => {
-    setMealItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQty = Math.max(1, (item.quantity || 1) + delta);
-        return { ...item, quantity: newQty };
-      }
-      return item;
-    }));
+    setMealItems(prev => {
+      const updated = prev.map(item => {
+        if (item.id === id) {
+          return { ...item, quantity: (item.quantity || 1) + delta };
+        }
+        return item;
+      });
+      return updated.filter(item => (item.quantity || 0) > 0);
+    });
   };
 
   const clearMeal = () => {

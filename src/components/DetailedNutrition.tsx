@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Dumbbell, Wheat, Droplets, Trophy, CheckCircle2, FileDown, RefreshCcw, ChevronRight, X } from 'lucide-react';
@@ -14,7 +14,15 @@ export default function DetailedNutrition() {
   const [manualScoreBonus, setManualScoreBonus] = useState(0);
 
   const totalMacros = totalProtein + totalCarbs + totalFat || 1;
-  const score = Math.max(0, Math.min(10, +(mealScore + manualScoreBonus).toFixed(1)));
+  
+  // Calculate a quality adjustment based on food categories
+  const qualityAdjustment = mealItems.reduce((acc, item) => {
+    if (item.category === 'Vegetables' || item.category === 'Fruits') return acc + 0.5;
+    if (item.category === 'Fast Food' || item.category === 'Snacks') return acc - 0.5;
+    return acc;
+  }, 0);
+
+  const score = Math.max(0, Math.min(10, +(mealScore + qualityAdjustment + manualScoreBonus).toFixed(1)));
 
   const MACROS = [
     { name: 'Carbs', val: `${Math.round(totalCarbs)}g`, pct: `${Math.round((totalCarbs / totalMacros) * 100)}%`, color: 'text-tertiary', bar: 'bg-tertiary', icon: <Wheat size={24} /> },
@@ -57,65 +65,49 @@ export default function DetailedNutrition() {
       targetId: 'egg-whites',
       type: 'Side Dish', 
       name: 'Replace Scrambled Eggs with Egg Whites', 
-      desc: 'Reduces fat and cholesterol while keeping high protein quality.',
-      currentImg: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1598965675045-45c5e72c72c5?q=80&w=100&auto=format&fit=crop'
+      desc: 'Reduces fat and cholesterol while keeping high protein quality.'
     },
-    'whole-wheat-toast': { 
+    'whole-wheat-bread': { 
       targetId: 'multigrain-bread',
       type: 'Bakery', 
-      name: 'Replace Whole Wheat Toast with Multigrain Bread', 
-      desc: 'Provides a more diverse range of micronutrients and fiber seeds.',
-      currentImg: 'https://images.unsplash.com/photo-1589533610925-1cffc309ebaa?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=100&auto=format&fit=crop'
+      name: 'Replace Whole Wheat Bread with Multigrain Bread', 
+      desc: 'Provides a more diverse range of micronutrients and fiber seeds.'
     },
     'salmon': { 
       targetId: 'grilled-chicken',
       type: 'Main Protein', 
       name: 'Replace Smoked Salmon with Grilled Chicken', 
-      desc: 'Significantly lower in sodium while maintaining high protein density.',
-      currentImg: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=100&auto=format&fit=crop'
+      desc: 'Significantly lower in sodium while maintaining high protein density.'
     },
     'white-bread': {
       targetId: 'whole-wheat-bread',
       type: 'Bakery',
       name: 'Replace White Bread with Whole Wheat',
-      desc: 'Increase fiber content and lower glycemic index.',
-      currentImg: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=200&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1589533610925-1cffc309ebaa?q=80&w=200&auto=format&fit=crop'
+      desc: 'Increase fiber content and lower glycemic index.'
     },
     'cheeseburger': {
       targetId: 'grilled-chicken',
       type: 'Main Dish',
       name: 'Replace Cheeseburger with Grilled Chicken',
-      desc: 'Reduces saturated fats and processed carbs significantly.',
-      currentImg: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?q=80&w=100&auto=format&fit=crop'
+      desc: 'Reduces saturated fats and processed carbs significantly.'
     },
     'fries': {
       targetId: 'sweet-potato',
       type: 'Side Dish',
       name: 'Replace Fries with Sweet Potato',
-      desc: 'Lower calorie density and higher vitamin A content.',
-      currentImg: 'https://images.unsplash.com/photo-1573082833021-88776054793f?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1528750955925-cd3cf3dba78d?q=80&w=100&auto=format&fit=crop'
+      desc: 'Lower calorie density and higher vitamin A content.'
     },
     'soda': {
       targetId: 'green-tea',
       type: 'Beverage',
       name: 'Replace Soda with Green Tea',
-      desc: 'Eliminates sugar and adds metabolic-boosting antioxidants.',
-      currentImg: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1523910088395-d745549042b5?q=80&w=100&auto=format&fit=crop'
+      desc: 'Eliminates sugar and adds metabolic-boosting antioxidants.'
     },
     'chips': {
       targetId: 'almonds',
       type: 'Snack',
       name: 'Replace Chips with Almonds',
-      desc: 'Healthy fats and protein instead of processed carbs and sodium.',
-      currentImg: 'https://images.unsplash.com/photo-1566478989125-0db550ce7ad7?q=80&w=100&auto=format&fit=crop',
-      suggestedImg: 'https://images.unsplash.com/photo-1508815121300-4b413cad11fb?q=80&w=100&auto=format&fit=crop'
+      desc: 'Healthy fats and protein instead of processed carbs and sodium.'
     }
   };
 
@@ -124,14 +116,98 @@ export default function DetailedNutrition() {
       const baseId = item.id.split('-').slice(0, -1).join('-') || item.id;
       const suggestion = SUGGESTIONS[baseId];
       if (!suggestion) return null;
+
+      const targetFood = FOOD_DATABASE.find(f => f.id === suggestion.targetId);
+
       return {
         ...suggestion,
         id: idx + 1,
         mealNumber: idx + 1,
-        originalId: item.id
+        originalId: item.id,
+        currentImg: item.image,
+        suggestedImg: targetFood?.image || item.image // fallback to current if target not found
       };
     })
     .filter(Boolean);
+
+  const verdict = useMemo(() => {
+    if (mealItems.length === 0) return { text: "", impact: "" };
+
+    const pPct = (totalProtein * 4) / (totalCalories || 1);
+    const cPct = (totalCarbs * 4) / (totalCalories || 1);
+    const fPct = (totalFat * 9) / (totalCalories || 1);
+    
+    const hasFastFood = mealItems.some(item => item.category === 'Fast Food');
+    const hasVegContent = mealItems.some(item => item.category === 'Vegetables' || item.category === 'Fruits');
+    
+    if (isImproved) {
+      return {
+        text: "Excellent swap! By choosing a more nutrient-dense alternative, you've optimized your micronutrient profile and reduced potential inflammatory markers. The AI has recalibrated your score.",
+        impact: "Improving metabolic efficiency..."
+      };
+    }
+
+    if (score >= 9) {
+      return {
+        text: "Exceptional balance! This meal is now highly optimized for peak performance and recovery. Minimum inflammatory load with maximum nutrient density.",
+        impact: "Optimized metabolic efficiency."
+      };
+    }
+
+    if (hasFastFood && score < 7) {
+      return {
+        text: "This meal contains processed elements that drive up sodium and saturated fat. While the macros might be okay, the internal inflammatory load is higher than ideal.",
+        impact: "Requires inflammatory management."
+      };
+    }
+
+    if (pPct > 0.35) {
+      return {
+        text: "Protein-rich profile! Excellent for muscle protein synthesis and metabolic thermogenesis. Consider adding more fiber-rich greens to assist with digestion.",
+        impact: "High anabolic potential."
+      };
+    }
+
+    if (cPct > 0.55) {
+      return {
+        text: "Carbohydrate dominant meal. This provides quick energy, but might lead to a blood sugar crash later. Try adding healthy fats or protein to slow digestion.",
+        impact: "High glycemic load detected."
+      };
+    }
+
+    if (fPct > 0.45) {
+      return {
+        text: "High fat density. While good for satiety, the caloric load is high. Ensure these are coming from unsaturated sources to protect cardiovascular health.",
+        impact: "Calorie dense / Ketogenic lean."
+      };
+    }
+
+    if (totalCalories > 1200) {
+      return {
+        text: "Significant caloric density detected. While the nutrient ratios may be intact, the sheer energy volume is high. Ideal for heavy training days, but monitor against daily requirements.",
+        impact: "High caloric load profile."
+      };
+    }
+
+    if (totalCalories < 200 && mealItems.length > 0) {
+      return {
+        text: "Very low caloric density. This is excellent as a light snack or side, but lacks the total energy required to be a primary performance meal.",
+        impact: "Low energy density."
+      };
+    }
+
+    if (!hasVegContent) {
+      return {
+        text: "Macronutrients are within range, but micronutrient diversity is low. Adding leafy greens or colorful vegetables would significantly boost your health score.",
+        impact: "Low micronutrient density."
+      };
+    }
+
+    return {
+      text: "This meal presents a strong macronutrient balance, particularly ideal for sustained energy. The mix of ingredients supports overall metabolic health.",
+      impact: "Balanced metabolic support."
+    };
+  }, [mealItems, score, isImproved, totalCalories, totalProtein, totalCarbs, totalFat]);
 
   return (
     <motion.div 
@@ -262,12 +338,9 @@ export default function DetailedNutrition() {
               <div className="flex-grow">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">AI Verdict</h2>
                 <p className="text-lg mb-6 leading-relaxed">
-                  {score >= 9 
-                    ? "Exceptional balance! This meal is now highly optimized for peak performance and recovery. Minimum inflammatory load with maximum nutrient density."
-                    : "This meal presents a strong macronutrient balance, particularly ideal for post-workout recovery given the high protein content. Complex carbohydrates will provide sustained energy release."
-                  }
+                  {verdict.text}
                 </p>
-                <p className="text-lg font-bold">Health Impact: {score >= 9 ? 'Optimized' : 'Excellent'} metabolic efficiency.</p>
+                <p className="text-lg font-bold">Health Impact: {verdict.impact}</p>
               </div>
             </div>
           </div>
@@ -323,6 +396,17 @@ export default function DetailedNutrition() {
                 </div>
               </button>
             ))}
+            {alternatives.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-10 bg-surface-container-low rounded-2xl border border-dashed border-surface-container-highest text-center px-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+                  <CheckCircle2 size={24} />
+                </div>
+                <h4 className="text-lg font-bold text-on-surface mb-2">Your meal is looking great!</h4>
+                <p className="text-sm text-secondary max-w-xs">
+                  NutriAI couldn't find any immediate better alternatives. Your current selection is already well-balanced.
+                </p>
+              </div>
+            )}
           </div>
         </section>
           </div>
