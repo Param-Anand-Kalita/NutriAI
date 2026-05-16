@@ -25,7 +25,7 @@ export default function Header() {
             onClick={() => setIsMenuOpen(false)}
           >
             <Sprout className="fill-current" size={28} />
-            <span className="hidden xs:inline">NutriAI</span>
+            <span>NutriAI</span>
           </Link>
         </div>
         
