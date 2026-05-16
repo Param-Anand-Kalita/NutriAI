@@ -268,7 +268,7 @@ export default function MealBuilder() {
           to="/detailed-nutrition" 
           className="mt-4 w-full py-4 bg-primary text-white font-bold text-center rounded-full hover:bg-primary/90 transition-all shadow-ambient active:scale-95 px-4"
         >
-          Detailed Nutrition Breakdown
+          Nutrition Breakdown
         </Link>
       </aside>
     </motion.div>

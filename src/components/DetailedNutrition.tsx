@@ -280,7 +280,7 @@ export default function DetailedNutrition() {
         </section>
 
         <section>
-          <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-2">Detailed Nutritional Breakdown</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-2">Nutrition Breakdown</h1>
           <p className="text-xl text-secondary">A comprehensive analysis of your meal, optimized by NutriAI.</p>
         </section>
 

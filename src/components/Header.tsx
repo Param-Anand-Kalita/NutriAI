@@ -12,7 +12,7 @@ export default function Header() {
   const NAV_LINKS = [
     { path: '/', label: 'Home' },
     { path: '/meal-builder', label: 'Meal Builder' },
-    { path: '/detailed-nutrition', label: 'Nutrition' },
+    { path: '/detailed-nutrition', label: 'Nutrition Breakdown' },
   ];
 
   return (
