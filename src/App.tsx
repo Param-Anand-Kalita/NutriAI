@@ -7,6 +7,7 @@ import MealBuilder from './components/MealBuilder';
 import DetailedNutrition from './components/DetailedNutrition';
 
 import { MealProvider } from './context/MealContext';
+import ScrollToTop from './components/ScrollToTop';
 
 export default function App() {
   React.useEffect(() => {
@@ -15,6 +16,7 @@ export default function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <MealProvider>
         <div className="min-h-screen flex flex-col font-sans bg-background selection:bg-primary/20 selection:text-primary">
           <Header />

@@ -242,17 +242,17 @@ export default function DetailedNutrition() {
             {mealItems.map((item, index) => (
               <div 
                 key={item.id} 
-                className="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-transparent"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-transparent gap-4"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-7 h-7 rounded-full bg-surface-container-highest text-secondary font-bold text-xs">
+                  <div className="flex items-center justify-center w-7 h-7 rounded-full bg-surface-container-highest text-secondary font-bold text-xs flex-shrink-0">
                     {index + 1}
                   </div>
-                  <div className="w-12 h-12 bg-white rounded-lg overflow-hidden shadow-sm border border-surface-container">
+                  <div className="w-12 h-12 bg-white rounded-lg overflow-hidden shadow-sm border border-surface-container flex-shrink-0">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
-                  <div>
-                    <h4 className="text-base font-bold text-on-surface leading-tight">
+                  <div className="min-w-0">
+                    <h4 className="text-base font-bold text-on-surface leading-tight truncate">
                       {item.name} 
                       {item.quantity && item.quantity > 1 && (
                         <span className="ml-2 text-primary text-xs font-bold bg-primary/10 px-1.5 py-0.5 rounded-md">
@@ -260,10 +260,10 @@ export default function DetailedNutrition() {
                         </span>
                       )}
                     </h4>
-                    <p className="text-xs text-secondary mt-0.5">{item.serving}</p>
+                    <p className="text-xs text-secondary mt-0.5 truncate">{item.serving}</p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0">
                   <span className="text-sm font-bold text-primary block">
                     {Math.round(item.calories * (item.quantity || 1))} kcal
                   </span>

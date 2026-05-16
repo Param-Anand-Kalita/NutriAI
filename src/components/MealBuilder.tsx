@@ -153,21 +153,22 @@ export default function MealBuilder() {
             {mealItems.map((item, index) => (
               <div 
                 key={item.id} 
-                className="bg-white p-4 md:p-6 rounded-3xl shadow-ambient flex items-center justify-between group hover:shadow-high transition-all border border-transparent"
+                className="bg-white p-4 md:p-6 rounded-3xl shadow-ambient flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:shadow-high transition-all border border-transparent"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-highest text-secondary font-bold text-sm">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-highest text-secondary font-bold text-sm flex-shrink-0">
                     {index + 1}
                   </div>
-                  <div className="w-16 h-16 bg-surface-container-high rounded-xl overflow-hidden shadow-sm">
+                  <div className="w-16 h-16 bg-surface-container-high rounded-xl overflow-hidden shadow-sm flex-shrink-0">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-on-surface">{item.name}</h3>
-                    <p className="text-sm text-secondary">{item.serving}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-on-surface truncate">{item.name}</h3>
+                    <p className="text-sm text-secondary truncate">{item.serving}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 md:gap-8">
+                
+                <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-8 border-t sm:border-t-0 pt-4 sm:pt-0">
                   <div className="flex items-center bg-surface-container-low rounded-2xl p-1 border border-surface-container">
                     <button 
                       onClick={() => updateQuantity(item.id, -1)}
@@ -189,14 +190,16 @@ export default function MealBuilder() {
                       +
                     </button>
                   </div>
-                  <div className="text-right min-w-[80px]">
+                  
+                  <div className="text-right min-w-[100px]">
                     <span className="text-lg font-bold text-primary block">{Math.round(item.calories * (item.quantity || 1))} kcal</span>
-                    <div className="flex gap-3 justify-end mt-0.5">
-                      <span className="text-[10px] font-bold text-secondary uppercase tracking-tight">C: {Math.round(item.carbs * (item.quantity || 1))}g</span>
-                      <span className="text-[10px] font-bold text-secondary uppercase tracking-tight">F: {Math.round(item.fat * (item.quantity || 1))}g</span>
-                      <span className="text-[10px] font-bold text-primary uppercase tracking-tight">P: {Math.round(item.protein * (item.quantity || 1))}g</span>
+                    <div className="flex gap-2 justify-end mt-0.5">
+                      <span className="text-[10px] font-bold text-secondary uppercase tracking-tight">C:{Math.round(item.carbs * (item.quantity || 1))}g</span>
+                      <span className="text-[10px] font-bold text-secondary uppercase tracking-tight">F:{Math.round(item.fat * (item.quantity || 1))}g</span>
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-tight">P:{Math.round(item.protein * (item.quantity || 1))}g</span>
                     </div>
                   </div>
+                  
                   <button 
                     onClick={() => removeFromMeal(item.id)}
                     className="text-secondary hover:text-error transition-colors p-2 rounded-full hover:bg-error-container"
