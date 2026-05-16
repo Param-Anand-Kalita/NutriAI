@@ -398,12 +398,16 @@ export default function DetailedNutrition() {
             ))}
             {alternatives.length === 0 && (
               <div className="flex flex-col items-center justify-center py-10 bg-surface-container-low rounded-2xl border border-dashed border-surface-container-highest text-center px-6">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
-                  <CheckCircle2 size={24} />
+                <div className={`w-12 h-12 ${score >= 8 ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'} rounded-full flex items-center justify-center mb-4`}>
+                  {score >= 8 ? <CheckCircle2 size={24} /> : <RefreshCcw size={24} className="opacity-50" />}
                 </div>
-                <h4 className="text-lg font-bold text-on-surface mb-2">Your meal is looking great!</h4>
+                <h4 className="text-lg font-bold text-on-surface mb-2">
+                  {score >= 8 ? "Your meal is looking great!" : "No direct swaps found"}
+                </h4>
                 <p className="text-sm text-secondary max-w-xs">
-                  NutriAI couldn't find any immediate better alternatives. Your current selection is already well-balanced.
+                  {score >= 8 
+                    ? "NutriAI couldn't find any immediate better alternatives. Your current selection is already well-balanced."
+                    : "While no direct item replacements were found in the database, you can still optimize this meal. Check the AI Verdict above for specific balancing tips."}
                 </p>
               </div>
             )}
